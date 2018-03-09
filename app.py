@@ -1,6 +1,5 @@
 from flask import Flask, request
 from flask_sqlalchemy import SQLAlchemy
-from flask_dance.contrib.facebook import make_facebook_blueprint, facebook
 from flask_dance.contrib.twitter import make_twitter_blueprint, twitter
 import random
 
