@@ -33,6 +33,9 @@ def parse_likes():
 
     return '{"result": "error"}'
 
+@app.route("/facebook")
+def main_page():
+    return render_template('facebook.html')
 
 @app.route("/events")
 def event():
@@ -45,22 +48,6 @@ twitter_blueprint = make_twitter_blueprint(api_key='f7dUFCVeAspsUmXBZXGLrNF8e',
                                            api_secret='yAjRQ7CXzoOmPjfoVO2QLOnz40sqhIyU3a43WC4NdZXbLXwJMI')
 
 app.register_blueprint(twitter_blueprint, url_prefix="/twitter_login")
-
-
-facebook_blueprint = make_facebook_blueprint(client_secret='84e3f634967016f48ac1b93987cd3ac6', client_id='548449348874242')
-app.register_blueprint(facebook_blueprint, url_prefix="/facebook_login")
-
-@app.route("/facebook")
-def facebook_login():
-    if not facebook.authorized:
-        return redirect(url_for("facebook.login"))
-    account_info = facebook.get("/me")
-
-    if account_info.ok:
-        account_info_json = account_info.json()
-        return "<h1> Your twitter name is @{}".format(
-            account_info_json['screen_name'])
-    return '<h1>Request failed!</h1>'
 
 
 @app.route("/twitter")
