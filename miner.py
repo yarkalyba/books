@@ -1,7 +1,7 @@
 import asyncio
 from bs4 import BeautifulSoup
 from models import *
-from app import db
+from app1 import db
 
 
 async def parse_bookstore():
@@ -17,7 +17,11 @@ async def parse_page(url):
     soup = BeautifulSoup(r, "html.parser")
     finn = soup.find_all("div", class_="mainGoodContent")
     lst = list(map(lambda i: "http://bookclub.ua" + i.find("a")["href"], finn))
-    for i in lst:
+    with open("urls.txt", "a") as f:
+
+        for i in lst:
+            f.write(i)
+
         await parse_book(i)
 
 
@@ -61,3 +65,4 @@ loop = asyncio.new_event_loop()
 asyncio.set_event_loop(loop)
 loop.run_until_complete(parse_bookstore())
 loop.close()
+

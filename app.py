@@ -1,17 +1,24 @@
-from flask import Flask, request
+from flask import Flask, request, render_template, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from flask_dance.contrib.twitter import make_twitter_blueprint, twitter
 import random
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////home/yarka/Documents/PycharmProjects/books/example19.db'
+app.config['SECRET_KEY'] = 'rybka{}'.format(random.randint)
+
+app.config[
+    'SQLALCHEMY_DATABASE_URI'] = \
+    'sqlite:////home/yarka/Documents/PycharmProjects/books/example19.db'
 
 db = SQLAlchemy(app)
 
 from models import *
-
 db.create_all()
 
+
+@app.route("/facebook")
+def main_page():
+    return render_template('first.html')
 
 @app.route("/books")
 def books():
@@ -26,15 +33,13 @@ def parse_likes():
     user = User(fb=data['facebook_id'])
     db.session.add(user)
 
-    event = Event(user_id=data['user_id'], book_id=data['book_id'], reaction=data['reaction'])
+    event = Event(user_id=data['user_id'], book_id=data['book_id'],
+                  reaction=data['reaction'])
     db.session.add(event)
     db.session.commit()
 
     return '{"result": "error"}'
 
-@app.route("/facebook")
-def main_page():
-    return render_template('facebook.html')
 
 @app.route("/events")
 def event():
@@ -42,9 +47,8 @@ def event():
     return '<br>'.join([str(event) for event in events])
 
 
-
 twitter_blueprint = make_twitter_blueprint(api_key='f7dUFCVeAspsUmXBZXGLrNF8e',
-                                           api_secret='yAjRQ7CXzoOmPjfoVO2QLOnz40sqhIyU3a43WC4NdZXbLXwJMI')
+                                          api_secret='yAjRQ7CXzoOmPjfoVO2QLOnz40sqhIyU3a43WC4NdZXbLXwJMI')
 
 app.register_blueprint(twitter_blueprint, url_prefix="/twitter_login")
 
@@ -62,5 +66,7 @@ def twitter_login():
             account_info_json['screen_name'])
     return '<h1>Request failed!</h1>'
 
+
 if __name__ == "__main__":
     app.run(debug=True)
+
