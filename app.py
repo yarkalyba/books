@@ -3,6 +3,8 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_dance.contrib.twitter import make_twitter_blueprint, twitter
 import random
 
+from sqlalchemy import select, engine, create_engine
+
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'rybka{}'.format(random.randint)
 
@@ -13,16 +15,36 @@ app.config[
 db = SQLAlchemy(app)
 
 from models import *
+
 db.create_all()
+
+
+@app.route("/login")
+def login():
+    render_template('login.html')
+
+
+@app.route("/bookpage")
+def bookpage():
+    engine = create_engine('sqlite:///:memory:', echo=True)
+    conn = engine.connect()
+
+    name = select([books])
+
+    result = conn.execute(name)
+    row = result.fetchone(result)
+    return "<p>" + row["photo"] + "</p>"
 
 
 @app.route("/facebook")
 def main_page():
-    return render_template('first.html')
+    return render_template('facebook.html')
+
 
 @app.route("/books")
 def books():
-    books = Books.query.all()
+    q = ([Books])
+    books = Books.query.column_descriptions()
     return '<br>'.join([str(book) for book in books])
 
 
@@ -48,7 +70,7 @@ def event():
 
 
 twitter_blueprint = make_twitter_blueprint(api_key='f7dUFCVeAspsUmXBZXGLrNF8e',
-                                          api_secret='yAjRQ7CXzoOmPjfoVO2QLOnz40sqhIyU3a43WC4NdZXbLXwJMI')
+                                           api_secret='yAjRQ7CXzoOmPjfoVO2QLOnz40sqhIyU3a43WC4NdZXbLXwJMI')
 
 app.register_blueprint(twitter_blueprint, url_prefix="/twitter_login")
 
@@ -69,4 +91,3 @@ def twitter_login():
 
 if __name__ == "__main__":
     app.run(debug=True)
-
