@@ -19,6 +19,11 @@ from models import *
 db.create_all()
 
 
+@app.route("/")
+def main():
+    return '<p>Не дивись, я гола <br>(с) cторінка</p>'
+
+
 @app.route("/login")
 def login():
     return render_template('index.html')
@@ -35,7 +40,7 @@ def books():
     return render_template("book.html", title=books.get_title(),
                            photo=books.get_photo(),
                            description=books.get_description())
-    # return '<br>'.join([book.get_photo() for book in books])
+
 
 
 @app.route("/api/v0.1/likes", methods=["POST"])
