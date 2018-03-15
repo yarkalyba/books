@@ -11,8 +11,17 @@ class Books(db.Model):
     author_id = db.Column(db.Integer, db.ForeignKey('author.id'))
     events = db.relationship("Event", backref='books', lazy=True)
 
-    def __repr__(self):
-        return "{0}".format(self.title)
+    def get_title(self):
+        return self.title
+
+    def get_photo(self):
+        return self.photo
+
+    def get_rating(self):
+        return self.rating
+
+    def get_description(self):
+        return self.description
 
 
 class Author(db.Model):
@@ -41,4 +50,3 @@ class Event(db.Model):
 
     def __repr__(self):
         return "{0}".format(self.book_id, self.reaction)
-

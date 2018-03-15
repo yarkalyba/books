@@ -21,19 +21,7 @@ db.create_all()
 
 @app.route("/login")
 def login():
-    render_template('login.html')
-
-
-@app.route("/bookpage")
-def bookpage():
-    engine = create_engine('sqlite:///:memory:', echo=True)
-    conn = engine.connect()
-
-    name = select([books])
-
-    result = conn.execute(name)
-    row = result.fetchone(result)
-    return "<p>" + row["photo"] + "</p>"
+    return render_template('index.html')
 
 
 @app.route("/facebook")
@@ -41,11 +29,13 @@ def main_page():
     return render_template('facebook.html')
 
 
-@app.route("/books")
+@app.route("/bookpage")
 def books():
-    q = ([Books])
-    books = Books.query.column_descriptions()
-    return '<br>'.join([str(book) for book in books])
+    books = Books.query.all()[2]
+    return render_template("book.html", title=books.get_title(),
+                           photo=books.get_photo(),
+                           description=books.get_description())
+    # return '<br>'.join([book.get_photo() for book in books])
 
 
 @app.route("/api/v0.1/likes", methods=["POST"])

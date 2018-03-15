@@ -3,8 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <title>Book</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
 </head>
-<body>
-<p>{{ name }}</p>
+<body style="background-color:black;">
+<div class="shadow">
+    <img src={{ photo }}/>
+</div>
+
+<h1 style="color:wheat">{{ title }}</h1>
+<font color="#f5deb3">{{ description }}</font>
+<a href="#" id="recommend" class="button">Recommend</a>
+<a href="#" id="another" class="button gray" class="gray">Another one</a>
+
 </body>
 </html>
