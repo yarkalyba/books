@@ -40,9 +40,9 @@ def book_page(a=0):
 @app.route("/next")
 def next():
     if request.method == 'POST':
-        if request.form['info'] == 'Recommend':
+        if request.form['submit'] == 'Recommend':
             pass
-        elif request.form['info'] == 'Another one':
+        elif request.form['submit'] == 'Another one':
             return book_page(1)
 
 
