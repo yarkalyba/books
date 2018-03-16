@@ -34,8 +34,10 @@ def main_page():
 def book_page():
     if request.method == 'POST':
         if request.form['submit'] == 'Recommend':
+            print("Rybka")
             pass
         elif request.form['submit'] == 'Another one':
+            print("Rybka")
             pass
 
     books = Books.query.all()[random.randint(0, 300)]
