@@ -62,11 +62,11 @@ def event():
     events = Event.query.all()
     return '<br>'.join([str(event) for event in events])
 
-
-twitter_blueprint = make_twitter_blueprint(api_key='f7dUFCVeAspsUmXBZXGLrNF8e',
-                                           api_secret='yAjRQ7CXzoOmPjfoVO2QLOnz40sqhIyU3a43WC4NdZXbLXwJMI')
-
-app.register_blueprint(twitter_blueprint, url_prefix="/twitter_login")
+#
+# twitter_blueprint = make_twitter_blueprint(api_key='f7dUFCVeAspsUmXBZXGLrNF8e',
+#                                            api_secret='yAjRQ7CXzoOmPjfoVO2QLOnz40sqhIyU3a43WC4NdZXbLXwJMI')
+#
+# app.register_blueprint(twitter_blueprint, url_prefix="/twitter_login")
 
 
 # @app.route("/twitter")
