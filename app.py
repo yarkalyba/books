@@ -8,7 +8,7 @@ app.config['SECRET_KEY'] = 'rybka{}'.format(random.randint)
 
 app.config[
     'SQLALCHEMY_DATABASE_URI'] = \
-    'sqlite:////home/PycharmProjects/books/example19.db'
+    "sqlite:////home/PycharmProjects/books/example19.db"
 
 db = SQLAlchemy(app)
 
@@ -61,7 +61,7 @@ def event():
     return '<br>'.join([str(event) for event in events])
 
 
-#
+
 # twitter_blueprint = make_twitter_blueprint(
 # api_key='f7dUFCVeAspsUmXBZXGLrNF8e',
 #
@@ -86,4 +86,3 @@ def event():
 
 if __name__ == "__main__":
     app.run(debug=True)
-    # TODO: Correct later
