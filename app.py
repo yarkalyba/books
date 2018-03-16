@@ -31,19 +31,17 @@ def main_page():
 
 
 @app.route("/bookpage")
-def book_page(a=0):
-    books = Books.query.all()[a]
-    return render_template("book.html", title=books.get_title(),
-                           photo=books.get_photo(),
-                           description=books.get_description())
-
-@app.route("/next")
-def next():
+def book_page():
     if request.method == 'POST':
         if request.form['submit'] == 'Recommend':
             pass
         elif request.form['submit'] == 'Another one':
-            return book_page(1)
+            pass
+
+    books = Books.query.all()[random.randint(0, 300)]
+    return render_template("book.html", title=books.get_title(),
+                           photo=books.get_photo(),
+                           description=books.get_description())
 
 
 @app.route("/api/v0.1/likes", methods=["POST"])
