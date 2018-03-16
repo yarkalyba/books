@@ -32,7 +32,7 @@ def main_page():
 
 @app.route("/bookpage")
 def books():
-    books = Books.query.all()[1]
+    books = Books.query.all()[8]
     return render_template("book.html", title=books.get_title(),
                            photo=books.get_photo(),
                            description=books.get_description())
