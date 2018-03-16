@@ -2,7 +2,6 @@ from flask import Flask, request, render_template, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 # from flask_dance.contrib.twitter import make_twitter_blueprint, twitter
 import random
-from sqlalchemy import select, engine, create_engine
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'rybka{}'.format(random.randint)
@@ -35,11 +34,10 @@ def main_page():
 
 @app.route("/bookpage")
 def books():
-    books = Books.query.all()[8]
+    books = Books.query.all()[1]
     return render_template("book.html", title=books.get_title(),
                            photo=books.get_photo(),
                            description=books.get_description())
-
 
 
 @app.route("/api/v0.1/likes", methods=["POST"])
@@ -62,9 +60,12 @@ def event():
     events = Event.query.all()
     return '<br>'.join([str(event) for event in events])
 
+
 #
-# twitter_blueprint = make_twitter_blueprint(api_key='f7dUFCVeAspsUmXBZXGLrNF8e',
-#                                            api_secret='yAjRQ7CXzoOmPjfoVO2QLOnz40sqhIyU3a43WC4NdZXbLXwJMI')
+# twitter_blueprint = make_twitter_blueprint(
+# api_key='f7dUFCVeAspsUmXBZXGLrNF8e',
+#
+# api_secret='yAjRQ7CXzoOmPjfoVO2QLOnz40sqhIyU3a43WC4NdZXbLXwJMI')
 #
 # app.register_blueprint(twitter_blueprint, url_prefix="/twitter_login")
 
@@ -85,4 +86,4 @@ def event():
 
 if __name__ == "__main__":
     app.run(debug=True)
-# TODO: Correct later
+    # TODO: Correct later
