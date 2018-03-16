@@ -1,6 +1,6 @@
 from flask import Flask, request, render_template, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
-from flask_dance.contrib.twitter import make_twitter_blueprint, twitter
+# from flask_dance.contrib.twitter import make_twitter_blueprint, twitter
 import random
 from sqlalchemy import select, engine, create_engine
 
@@ -69,19 +69,20 @@ twitter_blueprint = make_twitter_blueprint(api_key='f7dUFCVeAspsUmXBZXGLrNF8e',
 app.register_blueprint(twitter_blueprint, url_prefix="/twitter_login")
 
 
-@app.route("/twitter")
-def twitter_login():
-    if not twitter.authorized:
-        return redirect(url_for("twitter.login"))
-    account_info = twitter.get("account/settings.json")
-
-    if account_info.ok:
-        account_info_json = account_info.json()
-        # можна там свякі штуки робити вже
-        return "<h1> Your twitter name is @{}".format(
-            account_info_json['screen_name'])
-    return '<h1>Request failed!</h1>'
+# @app.route("/twitter")
+# def twitter_login():
+#     if not twitter.authorized:
+#         return redirect(url_for("twitter.login"))
+#     account_info = twitter.get("account/settings.json")
+#
+#     if account_info.ok:
+#         account_info_json = account_info.json()
+#         # можна там свякі штуки робити вже
+#         return "<h1> Your twitter name is @{}".format(
+#             account_info_json['screen_name'])
+#     return '<h1>Request failed!</h1>'
 
 
 if __name__ == "__main__":
     app.run(debug=True)
+# TODO: Correct later
