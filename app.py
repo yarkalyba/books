@@ -31,11 +31,19 @@ def main_page():
 
 
 @app.route("/bookpage")
-def books():
-    books = Books.query.all()[8]
+def book_page(a=0):
+    books = Books.query.all()[a]
     return render_template("book.html", title=books.get_title(),
                            photo=books.get_photo(),
                            description=books.get_description())
+
+@app.route("/next")
+def next():
+    if request.method == 'POST':
+        if request.form['info'] == 'Recommend':
+            pass
+        elif request.form['info'] == 'Another one':
+            return book_page(1)
 
 
 @app.route("/api/v0.1/likes", methods=["POST"])
