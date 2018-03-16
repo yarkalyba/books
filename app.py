@@ -2,7 +2,6 @@ from flask import Flask, request, render_template, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from flask_dance.contrib.twitter import make_twitter_blueprint, twitter
 import random
-
 from sqlalchemy import select, engine, create_engine
 
 app = Flask(__name__)
@@ -36,7 +35,7 @@ def main_page():
 
 @app.route("/bookpage")
 def books():
-    books = Books.query.all()[2]
+    books = Books.query.all()[8]
     return render_template("book.html", title=books.get_title(),
                            photo=books.get_photo(),
                            description=books.get_description())
