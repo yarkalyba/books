@@ -8,7 +8,7 @@ app.config['SECRET_KEY'] = 'rybka{}'.format(random.randint)
 
 app.config[
     'SQLALCHEMY_DATABASE_URI'] = \
-    'sqlite:////home/yarka/Documents/PycharmProjects/books/example19.db'
+    'sqlite:////home/PycharmProjects/books/example19.db'
 
 db = SQLAlchemy(app)
 
