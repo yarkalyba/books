@@ -6,11 +6,11 @@ import random
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'rybka{}'.format(random.randint)
 
-# app.config['SQLALCHEMY_DATABASE_URI'] =
-# "sqlite:////home/yarkarybka/books/example19.db"
-app.config[
-    'SQLALCHEMY_DATABASE_URI'] = \
-    "sqlite://///home/yarka/PycharmProjects/books/example19.db"
+app.config['SQLALCHEMY_DATABASE_URI'] =
+"sqlite:////home/yarkarybka/books/example19.db"
+# app.config[
+#     'SQLALCHEMY_DATABASE_URI'] = \
+#     "sqlite://///home/yarka/PycharmProjects/books/example19.db"
 
 db = SQLAlchemy(app)
 
