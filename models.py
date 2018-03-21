@@ -23,6 +23,12 @@ class Books(db.Model):
     def get_description(self):
         return self.description
 
+    def get_id(self):
+        return self.id
+
+    def set_rating(self, rating):
+        self.rating = rating
+
 
 class Author(db.Model):
     id = db.Column(db.Integer, primary_key=True)

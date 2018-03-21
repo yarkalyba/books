@@ -1,3 +1,5 @@
+# File: miner.py
+# parsing the internet bookstore using BeautifulSoup
 import asyncio
 from bs4 import BeautifulSoup
 from models import *
@@ -5,6 +7,9 @@ from app import db
 
 
 async def parse_bookstore():
+    """
+    function for moving thought the pages with hole lists of books
+    """
     for i in range(0, 2300, 100):
         url = "https://www.bookclub.ua/ukr/catalog/books/?gc=100&listmode=2" \
               "&i={}".format(
@@ -13,6 +18,10 @@ async def parse_bookstore():
 
 
 async def parse_page(url):
+    """
+    :param url: url for page with list of books
+    function gets the url of a certain book
+    """
     lst = []
     import urllib.request
     r = urllib.request.urlopen(url)
@@ -27,6 +36,11 @@ async def parse_page(url):
 
 
 async def parse_book(url):
+    """
+    function to parse book page, writes main information into the database
+    :param url: url for certain book
+    """
+
     import urllib.request
     r = urllib.request.urlopen(url)
     soup = BeautifulSoup(r, "html.parser")

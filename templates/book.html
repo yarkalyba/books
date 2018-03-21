@@ -12,8 +12,10 @@
 
 <h1 style="color:wheat">{{ title }}</h1>
 <font color="#f5deb3">{{ description }}</font>
-<a href="#" type="submit" name="submit" id="recommend" class="button">Recommend</a>
-<a href="#" type="submit" name="submit" id="another" class="button gray" class="gray">Another one</a>
+<form action="bookpage" method="post">
+    <input type="submit" value='recommend' name='recommend' class="button">
+    <input type="submit" value='another' name='another' class="button gray">
+</form>
 
 </body>
 </html>

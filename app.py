@@ -6,7 +6,11 @@ import random
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'rybka{}'.format(random.randint)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:////home/yarkarybka/books/example19.db"
+# app.config['SQLALCHEMY_DATABASE_URI'] =
+# "sqlite:////home/yarkarybka/books/example19.db"
+app.config[
+    'SQLALCHEMY_DATABASE_URI'] = \
+    "sqlite://///home/yarka/PycharmProjects/books/example19.db"
 
 db = SQLAlchemy(app)
 
@@ -30,20 +34,24 @@ def main_page():
     return render_template('facebook.html')
 
 
-@app.route("/bookpage")
+@app.route("/bookpage", methods=['POST', 'GET'])
 def book_page():
+    books = Books.query.all()
+    book = books[random.randint(0, len(books))]
+    # book = books[0]
     if request.method == 'POST':
-        if request.form['submit'] == 'Recommend':
-            print("Rybka")
-            pass
-        elif request.form['submit'] == 'Another one':
-            print("Rybka")
+        if 'recommend' in request.form:
+            # id = book.get_id()
+            # book1 = Books.query.filter_by(id=id)
+            if book.get_rating() == None:
+                book.set_rating(0)
+            book.set_rating(int(book.get_rating()) + 1)
+        elif 'another' in request.form:
             pass
 
-    books = Books.query.all()[random.randint(0, 300)]
-    return render_template("book.html", title=books.get_title(),
-                           photo=books.get_photo(),
-                           description=books.get_description())
+    return render_template("book.html", title=book.get_title(),
+                           photo=book.get_photo(),
+                           description=book.get_description())
 
 
 @app.route("/api/v0.1/likes", methods=["POST"])
@@ -67,7 +75,6 @@ def event():
     return '<br>'.join([str(event) for event in events])
 
 
-
 # twitter_blueprint = make_twitter_blueprint(
 # api_key='f7dUFCVeAspsUmXBZXGLrNF8e',
 #
@@ -88,6 +95,7 @@ def event():
 #         return "<h1> Your twitter name is @{}".format(
 #             account_info_json['screen_name'])
 #     return '<h1>Request failed!</h1>'
+
 
 
 if __name__ == "__main__":
