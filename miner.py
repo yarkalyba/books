@@ -3,7 +3,6 @@
 import asyncio
 from bs4 import BeautifulSoup
 from models import *
-from app import db
 
 
 async def parse_bookstore():
@@ -27,12 +26,9 @@ async def parse_page(url):
     r = urllib.request.urlopen(url)
     soup = BeautifulSoup(r, "html.parser")
     finn = soup.find_all("div", class_="mainGoodContent")
-    lst = list(map(lambda i: "http://bookclub.ua" + i.find("a")["href"], finn))
-    with open("urls.txt", "a") as f:
-        for i in lst:
-            f.write(i)
-
-        await parse_book(i)
+    for fin in finn:
+        book_url = "http://bookclub.ua" + fin.find("a")["href"]
+        await parse_book(book_url)
 
 
 async def parse_book(url):

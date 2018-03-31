@@ -4,14 +4,17 @@ from flask_sqlalchemy import SQLAlchemy
 import random
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'rybka{}'.format(random.randint)
+app.config['SECRET_KEY'] = 'rybka1'
 
-app.config[
-    'SQLALCHEMY_DATABASE_URI'] = \
-    "sqlite:////home/yarkarybka/books/example19.db"
+# pythonanywhere
 # app.config[
 #     'SQLALCHEMY_DATABASE_URI'] = \
-#     "sqlite://///home/yarka/PycharmProjects/books/example19.db"
+#     "sqlite:////home/yarkarybka/books/example20.db"
+
+# localhost
+app.config[
+    'SQLALCHEMY_DATABASE_URI'] = \
+    "sqlite://///home/yarka/PycharmProjects/books/example20.db"
 
 db = SQLAlchemy(app)
 
@@ -49,7 +52,7 @@ def book_page():
             book.set_rating(int(book.get_rating()) + 1)
         elif 'another' in request.form:
             pass
-
+        db.session.commit()
     return render_template("book.html", title=book.get_title(),
                            photo=book.get_photo(),
                            description=book.get_description())
