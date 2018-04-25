@@ -14,7 +14,7 @@ app.config['SECRET_KEY'] = 'rybka1'
 # localhost
 app.config[
     'SQLALCHEMY_DATABASE_URI'] = \
-    "sqlite://///home/yarka/PycharmProjects/books/example20.db"
+    "sqlite://///home/yarka/PycharmProjects/books/example21.db"
 
 db = SQLAlchemy(app)
 

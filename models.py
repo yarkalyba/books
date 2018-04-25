@@ -2,6 +2,10 @@ from app import db
 
 
 class Books(db.Model):
+    """
+    Class to form a table in a database
+    Represents a book with such columns as title, description, p
+    """
     id = db.Column(db.Integer, nullable=False, primary_key=True)
     title = db.Column(db.Text)
     description = db.Column(db.Text)
