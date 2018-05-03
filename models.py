@@ -11,6 +11,7 @@ class Books(db.Model):
     description = db.Column(db.Text)
     photo = db.Column(db.Text)
     rating = db.Column(db.Integer)
+    # rating_from_bookstore = db.Column(db.Float)
     genre_id = db.Column(db.Integer, db.ForeignKey('genre.id'))
     author_id = db.Column(db.Integer, db.ForeignKey('author.id'))
     events = db.relationship("Event", backref='books', lazy=True)

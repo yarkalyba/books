@@ -1,10 +1,11 @@
 # File: miner.py
 # parsing the internet bookstore using BeautifulSoup
+import asyncio
 from bs4 import BeautifulSoup
 from models import *
 
 
-def parse_bookstore():
+async def parse_bookstore():
     """
     function for moving thought the pages with hole lists of books
     """
@@ -12,10 +13,10 @@ def parse_bookstore():
         url = "https://www.bookclub.ua/ukr/catalog/books/?gc=100&listmode=2" \
               "&i={}".format(
             i)
-        parse_page(url)
+        await parse_page(url)
 
 
-def parse_page(url):
+async def parse_page(url):
     """
     :param url: url for page with list of books
     function gets the url of a certain book
@@ -27,10 +28,10 @@ def parse_page(url):
     finn = soup.find_all("div", class_="mainGoodContent")
     for fin in finn:
         book_url = "http://bookclub.ua" + fin.find("a")["href"]
-        parse_book(book_url)
+        await parse_book(book_url)
 
 
-def parse_book(url):
+async def parse_book(url):
     """
     function to parse book page, writes main information into the database
     :param url: url for certain book
@@ -65,13 +66,17 @@ def parse_book(url):
     if author is None:
         author = Author(name=author_add)
 
+    db.session.add(genre)
+    db.session.add(author)
+    db.session.commit()
+    book = Books(title=name, photo=picture_add, description=description,
+                 rating_from_bookstore=rating_from_bookstore,
+                 genre_id=genre.id, author_id=author.id)
+    db.session.add(book)
+    db.session.commit()
 
 
-    # db.session.add(genre)
-    # db.session.add(author)
-    # db.session.commit()
-    # book = Books(title=name, photo=picture_add, description=description,
-    #              rating_from_bookstore=rating_from_bookstore,
-    # genre_id = genre.id, author_id = author.id)
-    # db.session.add(book)
-    # db.session.commit()
+loop = asyncio.new_event_loop()
+asyncio.set_event_loop(loop)
+loop.run_until_complete(parse_bookstore())
+loop.close()
