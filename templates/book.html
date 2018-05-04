@@ -6,16 +6,25 @@
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body style="background-color:black;">
-<div class="shadow">
-    <img src="{{ photo }}"/>
-</div>
 
-<h1 style="color:wheat">{{ title }}</h1>
-<font color="#f5deb3">{{ description }}</font>
-<form action="bookpage" method="post">
-    <input type="submit" value='recommend' name='recommend' class="button">
-    <input type="submit" value='another' name='another' class="button gray">
-</form>
-
+<section class="wrapper">
+    <div class="title-section">
+        <h1 style="color:wheat">{{ title }}</h1>
+    </div>
+    <div class="content-section">
+        <div class="image-block inner-data">
+            <img src="{{ photo }}"/>
+        </div>
+        <div class="description-block inner-data">
+            <p>{{ description }}</p>
+        </div>
+    </div>
+    <div class="control-section">
+        <form action="bookpage" method="post">
+            <input type="submit" value='recommend' name='recommend' class="button">
+            <input type="submit" value='another' name='another' class="button gray">
+        </form>
+    </div>
+</section>
 </body>
 </html>
