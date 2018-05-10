@@ -38,7 +38,6 @@ def parse_book(url):
 
     import urllib.request
     r = urllib.request.urlopen(url)
-    # soup = BeautifulSoup(r, db, "html.parser")
     soup = BeautifulSoup(r, 'html.parser')
     name = soup.find('article', class_='prd-m-info-block').h1.string.strip()
     picture = soup.find('div', class_='zooming').a["href"]
@@ -51,11 +50,23 @@ def parse_book(url):
     else:
         author_add = author_div.get_text()
 
+    try:
+        rating_from_bookstore = soup.find(id='reitingstar')['alt']
+    except TypeError:
+        rating_from_bookstore = None
+
     d = soup.find('div', class_='proddesc')
     description = ' '.join(d.stripped_strings)
     genre_add = soup.find_all('div', class_='prodchap')[-1].a.get_text()
-
+    genre = Genre.query.filter_by(name=genre_add).first()
+    if genre is None:
+        genre = Genre(name=genre_add)
+    author = Author.query.filter_by(name=author_add).first()
+    if author is None:
+        author = Author(name=author_add)
+    print(rating_from_bookstore)
     book_dict = {'name': name, 'picture': picture_add, 'author': author_add,
-                 'description': description, 'genre': genre_add}
+                 'description': description, 'genre': genre_add,
+                 'rating': rating_from_bookstore}
     json_book = json.dumps(book_dict)
     return json_book

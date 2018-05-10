@@ -21,8 +21,9 @@
     </div>
     <div class="control-section">
         <form action="bookpage" method="post">
-            <input type="submit" value='recommend' name='recommend' class="button">
-            <input type="submit" value='another' name='another' class="button gray">
+            <input type="hidden" value="{{ book_id }}" name="book_id">
+            <input type="submit" value='like' name='like' class="button">
+            <input type="submit" value='dislike' name='dislike' class="button gray">
         </form>
     </div>
 </section>

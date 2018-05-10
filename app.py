@@ -3,21 +3,21 @@ from flask_sqlalchemy import SQLAlchemy
 # from flask_dance.contrib.twitter import make_twitter_blueprint, twitter
 import random
 import json
-
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'rybka1'
 
-# pythonanywhere
-# app.config[
-#     'SQLALCHEMY_DATABASE_URI'] = \
-#     "sqlite:////home/yarkarybka/books/example20.db"
-
-# localhost
+pythonanywhere
 app.config[
     'SQLALCHEMY_DATABASE_URI'] = \
-    "sqlite://///home/yarka/PycharmProjects/books/example4.db"
+    "sqlite:////home/yarkarybka/books/all_books.db"
+
+# # localhost
+# app.config[
+#     'SQLALCHEMY_DATABASE_URI'] = \
+#     "sqlite://///home/yarka/PycharmProjects/books/all_books.db"
 
 db = SQLAlchemy(app)
+
 
 from models import *
 
@@ -50,7 +50,7 @@ def book_json():
     db.session.commit()
     book = Books(title=data["name"], photo=data["picture"],
                  description=data["description"],
-                 genre_id=genre.id, author_id=author.id)
+                 genre_id=genre.id, author_id=author.id, rating_from_bookstore=data['rating'])
     db.session.add(book)
     db.session.commit()
 
@@ -65,19 +65,35 @@ def main_page():
 @app.route("/bookpage", methods=['POST', 'GET'])
 def book_page():
     books = Books.query.all()
-    book = books[random.randint(0, len(books))]
+    num_of_book = random.randint(0, len(books))
+    book = books[num_of_book]
+    print('lol')
     if request.method == 'POST':
-        if 'recommend' in request.form:
-            if book.get_rating() == None:
-                book.set_rating(0)
-            book.set_rating(int(book.get_rating()) + 1)
-        elif 'another' in request.form:
-            pass
+        print(int(request.form['book_id']))
+        book = books[int(request.form['book_id'])]
+        print(book)
+        # print(book.get_title())
+        # print(request.form["book_id"])
+        if 'like' in request.form:
+            if book.get_like() == None:
+                book.set_like(0)
+            book.set_like(int(book.get_like()) + 1)
+
+        else:
+            if book.get_dislike() == None:
+                book.set_dislike(0)
+            book.set_dislike(int(book.get_dislike()) + 1)
         db.session.commit()
     return render_template("book.html", title=book.get_title(),
                            photo=book.get_photo(),
-                           description=book.get_description())
+                           description=book.get_description(), book_id=num_of_book)
 
+@app.route("/represent_book")
+def represent(book):
+    print("lol")
+    return render_template('book.html', title=book.get_title(),
+                           photo=book.get_photo(),
+                           description=book.get_description())
 
 # twitter_blueprint = make_twitter_blueprint(
 # api_key='f7dUFCVeAspsUmXBZXGLrNF8e',

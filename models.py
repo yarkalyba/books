@@ -10,8 +10,9 @@ class Books(db.Model):
     title = db.Column(db.Text)
     description = db.Column(db.Text)
     photo = db.Column(db.Text)
-    rating = db.Column(db.Integer)
-    # rating_from_bookstore = db.Column(db.Float)
+    likes = db.Column(db.Integer)
+    dislikes = db.Column(db.Integer)
+    rating_from_bookstore = db.Column(db.Float)
     genre_id = db.Column(db.Integer, db.ForeignKey('genre.id'))
     author_id = db.Column(db.Integer, db.ForeignKey('author.id'))
     events = db.relationship("Event", backref='books', lazy=True)
@@ -22,8 +23,11 @@ class Books(db.Model):
     def get_photo(self):
         return self.photo
 
-    def get_rating(self):
-        return self.rating
+    def get_like(self):
+        return self.likes
+
+    def get_dislike(self):
+        return self.dislikes
 
     def get_description(self):
         return self.description
@@ -31,9 +35,11 @@ class Books(db.Model):
     def get_id(self):
         return self.id
 
-    def set_rating(self, rating):
-        self.rating = rating
+    def set_like(self, rating):
+        self.likes = rating
 
+    def set_dislike(self, rating):
+        self.dislikes = rating
 
 class Author(db.Model):
     id = db.Column(db.Integer, primary_key=True)
