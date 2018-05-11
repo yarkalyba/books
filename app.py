@@ -3,14 +3,13 @@ from flask_sqlalchemy import SQLAlchemy
 # from flask_dance.contrib.twitter import make_twitter_blueprint, twitter
 import random
 import json
+import config
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'rybka1'
+app.config['SQLALCHEMY_DATABASE_URI'] = config.DB_PATH
 
 # # pythonanywhere
-app.config[
-    'SQLALCHEMY_DATABASE_URI'] = \
-    "sqlite:////home/yarkarybka/books/all_books.db"
 
 # # localhost
 # app.config[
