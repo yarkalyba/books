@@ -7,7 +7,7 @@ import json
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'rybka1'
 
-pythonanywhere
+# # pythonanywhere
 app.config[
     'SQLALCHEMY_DATABASE_URI'] = \
     "sqlite:////home/yarkarybka/books/all_books.db"
@@ -78,8 +78,6 @@ def book_page():
         print(int(request.form['book_id']))
         book = books[int(request.form['book_id'])]
         print(book)
-        # print(book.get_title())
-        # print(request.form["book_id"])
         if 'like' in request.form:
             if book.get_like() == None:
                 book.set_like(0)
