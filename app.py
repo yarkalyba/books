@@ -3,6 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 # from flask_dance.contrib.twitter import make_twitter_blueprint, twitter
 import random
 import json
+
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'rybka1'
 
@@ -18,7 +19,6 @@ app.config[
 
 db = SQLAlchemy(app)
 
-
 from models import *
 
 db.create_all()
@@ -27,6 +27,11 @@ db.create_all()
 @app.route("/")
 def main():
     return '<p>Не дивись, я гола <br>(с) cторінка</p>'
+
+
+@app.route("/policy")
+def policy():
+    return '<p>Policy</p>'
 
 
 @app.route("/login")
@@ -50,7 +55,8 @@ def book_json():
     db.session.commit()
     book = Books(title=data["name"], photo=data["picture"],
                  description=data["description"],
-                 genre_id=genre.id, author_id=author.id, rating_from_bookstore=data['rating'])
+                 genre_id=genre.id, author_id=author.id,
+                 rating_from_bookstore=data['rating'])
     db.session.add(book)
     db.session.commit()
 
@@ -86,7 +92,9 @@ def book_page():
         db.session.commit()
     return render_template("book.html", title=book.get_title(),
                            photo=book.get_photo(),
-                           description=book.get_description(), book_id=num_of_book)
+                           description=book.get_description(),
+                           book_id=num_of_book)
+
 
 @app.route("/represent_book")
 def represent(book):
@@ -94,6 +102,7 @@ def represent(book):
     return render_template('book.html', title=book.get_title(),
                            photo=book.get_photo(),
                            description=book.get_description())
+
 
 # twitter_blueprint = make_twitter_blueprint(
 # api_key='f7dUFCVeAspsUmXBZXGLrNF8e',
