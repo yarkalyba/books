@@ -22,6 +22,11 @@ You will get your unique room name, that will be used to vite for books in your 
 To vote for books press the button *get list*. You will see the books one by one, 
 all you need to do is to like or dislike. Voting is privat.  
 
+### Results
+
+Results are represented as a rating page, where all books are sorted by number of likes. 
+The results do not give an objective assessment of the quality or format of the book, 
+as it is only a reflection of the preferences of a particular group of people who were selected to the vote. 
 
 ## Authors
 
