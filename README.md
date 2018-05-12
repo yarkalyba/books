@@ -8,7 +8,7 @@ To use the application visit a [website](http://yarkarybka.pythonanywhere.com/).
 
 ### Logging in
 
-To login is availiable with Facebook and Twitter. The application will use only your 
+Login is availiable with Facebook and Twitter. The application will use only your 
 email and likes and will not post any messeges. 
 
 ### Making own list-to-choose and adding books
