@@ -4,7 +4,7 @@ Web application that will help you to choose which book to read next.
 Can be used for books clubs or by planing lesssons.
 
 ## Getting started
-To use the application visit a [website](http://yarkarybka.pythonanywhere.com/) 
+To use the application visit a [website](http://yarkarybka.pythonanywhere.com/).
 
 ### Logging in
 
