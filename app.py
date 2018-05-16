@@ -66,6 +66,19 @@ def book_json():
 def main_page():
     return render_template('facebook.html')
 
+@app.route('/rating', methods=['GET'])
+def rating_page():
+    books = Books.query.all()
+    num_of_book = random.randint(0, len(books))
+    upd = []
+    for i in range(0,num_of_book):
+        book = books[i]
+        upd.append(dict(title=book.get_title(),
+                           photo=book.get_photo(),
+                           description=book.get_description(),
+                           likes=book.get_like(), dislikes=book.get_dislike() ))
+    upd = sorted(upd, key=lambda x: x['likes'] if x['likes'] else 0, reverse = True)
+    return render_template("rating.html", items = upd,)
 
 @app.route("/bookpage", methods=['POST', 'GET'])
 def book_page():
