@@ -1,19 +1,29 @@
 from flask import Flask, request, render_template, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate, MigrateCommand
+from flask_script import Manager
 # from flask_dance.contrib.twitter import make_twitter_blueprint, twitter
 import random
 import json
 import config
+import requests
+import uuid
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'rybka1'
 app.config['SQLALCHEMY_DATABASE_URI'] = config.DB_PATH
 
 db = SQLAlchemy(app)
+# migrate = Migrate(app, db)
+
+# manager = Manager(app)
+# manager.add_command('db', MigrateCommand)
+
 
 from models import *
 
 db.create_all()
+
 
 @app.route("/policy")
 def policy():
@@ -27,7 +37,9 @@ def login():
 
 @app.route("/json", methods=['POST'])
 def book_json():
+    print("added new book")
     data = json.loads(request.get_json())
+    print(data["genre"])
     genre = Genre.query.filter_by(name=data["genre"]).first()
     if genre is None:
         genre = Genre(name=data["genre"])
@@ -35,7 +47,9 @@ def book_json():
     author = Author.query.filter_by(name=data["author"]).first()
     if author is None:
         author = Author(name=data["author"])
-
+    room = Room.query.filter_by(name=data['room']).first()
+    if room is None:
+        room = Room(name=data['room'])
     db.session.add(genre)
     db.session.add(author)
     db.session.commit()
@@ -45,8 +59,10 @@ def book_json():
                  rating_from_bookstore=data['rating'])
     db.session.add(book)
     db.session.commit()
-
-    return '{"result": "error"}'
+    db.session.add(room)
+    room.rooms_books.append(book)
+    db.session.commit()
+    return '<p>Book added</p>'
 
 
 @app.route("/facebook")
@@ -79,6 +95,45 @@ def book_page():
                            description=book.get_description(),
                            book_id=num_of_book)
 
+
+@app.route("/add_book", methods=['POST'])
+def add_book():
+    room = request.form['room_id']
+    title = request.form.get('book_title')
+    print(title)
+    photo = request.form.get('photo')
+    print(photo)
+    author = request.form.get('author')
+    print(author)
+    description = request.form.get('description')
+    print(description)
+    book_dict = {'name': title, 'picture': photo, 'author': author,
+                 'description': description, 'genre': None,
+                 'rating': None, 'room': room}
+    json_book = json.dumps(book_dict)
+    print('before request')
+    requests.post("http://127.0.0.1:5000/json", json=json_book)
+    if 'Add one more' in request.form:
+        return render_template('adding.html', room_id=room)
+    else:
+        return '<p>Save your room name</p>'
+
+
+@app.route('/adding')
+def adding():
+    room_id = uuid.uuid4()
+    return render_template('adding.html', room_id=room_id)
+
+
+@app.route('/room')
+def room():
+    pass
+
+@app.route("/action")
+def action():
+    return render_template('choose_option.html')
+
+
 # twitter_blueprint = make_twitter_blueprint(
 # api_key='f7dUFCVeAspsUmXBZXGLrNF8e',
 #
@@ -95,11 +150,12 @@ def book_page():
 #
 #     if account_info.ok:
 #         account_info_json = account_info.json()
-#         # можна там свякі штуки робити вже
 #         return "<h1> Your twitter name is @{}".format(
 #             account_info_json['screen_name'])
 #     return '<h1>Request failed!</h1>'
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(threaded=True, debug=True)
+    # manager.run()
+    # app.run(debug=True)
