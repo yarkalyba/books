@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add your book</title>
+</head>
+<body>
+<h2>Add book</h2>
+
+<form action="add_book" method="post" id="yarka">
+    <input type="hidden" value="{{ room_id }}" name="book_id">
+    Book title:<br>
+    <input type="text" name="book_title"><br>
+
+    Photo:<br>
+    <input type="text" name="photo"><br>
+
+    Author:<br>
+    <input type="text" name="author"><br>
+    Description:<br>
+    <textarea name="description" form="yarka"></textarea> <br>
+    <input type="submit" value="Add one more">
+    <input type="submit" value='Stop adding'>
+
+</form>
+
+</body>
+</html>

@@ -58,6 +58,7 @@ def parse_book(url):
     d = soup.find('div', class_='proddesc')
     description = ' '.join(d.stripped_strings)
     genre_add = soup.find_all('div', class_='prodchap')[-1].a.get_text()
+
     genre = Genre.query.filter_by(name=genre_add).first()
     if genre is None:
         genre = Genre(name=genre_add)

@@ -1,5 +1,7 @@
 from app import db
 
+rooms = db.Table('rooms',db.Column('book_id', db.Integer, db.ForeignKey('books.id'),primary_key=True),db.Column('room_id', db.Integer, db.ForeignKey('room.id'),primary_key=True))
+
 
 class Books(db.Model):
     """
@@ -15,7 +17,6 @@ class Books(db.Model):
     rating_from_bookstore = db.Column(db.Float)
     genre_id = db.Column(db.Integer, db.ForeignKey('genre.id'))
     author_id = db.Column(db.Integer, db.ForeignKey('author.id'))
-    events = db.relationship("Event", backref='books', lazy=True)
 
     def get_title(self):
         return self.title
@@ -41,6 +42,7 @@ class Books(db.Model):
     def set_dislike(self, rating):
         self.dislikes = rating
 
+
 class Author(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(30))
@@ -53,17 +55,12 @@ class Genre(db.Model):
     books = db.relationship("Books", backref='genre', lazy=True)
 
 
+class Room(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.Text, nullable=True)
+    rooms_books = db.relationship('Books', secondary=rooms, lazy='subquery',
+                                  backref=db.backref('rooms1', lazy=True))
+
+
 class User(db.Model):
     id = db.Column(db.Integer, nullable=True, primary_key=True)
-    fb = db.Column(db.Text)
-    events = db.relationship("Event", backref='user', lazy=True)
-
-
-class Event(db.Model):
-    id = db.Column(db.Integer, nullable=True, primary_key=True)
-    reaction = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    book_id = db.Column(db.Integer, db.ForeignKey('books.id'))
-
-    def __repr__(self):
-        return "{0}".format(self.book_id, self.reaction)
