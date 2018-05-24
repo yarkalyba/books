@@ -59,7 +59,7 @@ class Room(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.Text, nullable=True)
     rooms_books = db.relationship('Books', secondary=rooms, lazy='subquery',
-                                  backref=db.backref('rooms1', lazy=True))
+                                  backref=db.backref('rooms_with_books', lazy=True))
 
 
 class User(db.Model):

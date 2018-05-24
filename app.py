@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template, redirect, url_for
+from flask import Flask, request, render_template, redirect, url_for, session
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate, MigrateCommand
 from flask_script import Manager
@@ -8,6 +8,7 @@ import json
 import config
 import requests
 import uuid
+
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'rybka1'
@@ -32,7 +33,7 @@ def policy():
 
 @app.route("/")
 def login():
-    return render_template('index.html')
+    return render_template('room.html')
 
 
 @app.route("/json", methods=['POST'])
@@ -69,6 +70,7 @@ def book_json():
 def main_page():
     return render_template('facebook.html')
 
+
 @app.route('/rating', methods=['GET'])
 def rating_page():
     books = Books.query.all()
@@ -83,6 +85,68 @@ def rating_page():
     upd = sorted(upd, key=lambda x: x['likes'] if x['likes'] else 0, reverse = True)
     return render_template("rating.html", items = upd,)
 
+
+
+@app.route('/bookpage1', methods=['POST', 'GET'])
+def book_page1():
+    # name = request.args['room_id']
+    name = session['room_id']
+    print(name)
+    books = Books.query.filter(Books.rooms_with_books.any(name=name)).all()
+    book = books.pop()
+
+    if request.method == 'POST':
+        # print(int(request.form['book_id']))
+        book = Books.query.get(int(request.form['book_id']))
+        # book = books[int(request.form['book_id'])]
+        print(book)
+        if 'like' in request.form:
+            if book.get_like() == None:
+                book.set_like(0)
+            book.set_like(int(book.get_like()) + 1)
+        else:
+            if book.get_dislike() == None:
+                book.set_dislike(0)
+            book.set_dislike(int(book.get_dislike()) + 1)
+        db.session.commit()
+    return render_template("book.html", books=books)
+
+@app.route("/add_book", methods=['POST'])
+def add_book():
+    room = request.form['room_id']
+    title = request.form.get('book_title')
+    print(title)
+    photo = request.form.get('photo')
+    print(photo)
+    author = request.form.get('author')
+    print(author)
+    description = request.form.get('description')
+    print(description)
+    book_dict = {'name': title, 'picture': photo, 'author': author,
+                 'description': description, 'genre': None,
+                 'rating': None, 'room': room}
+    json_book = json.dumps(book_dict)
+    print('before request')
+    requests.post("http://127.0.0.1:5000/json", json=json_book)
+    if 'add' in request.form:
+        return render_template('adding.html', room_id=room)
+    else:
+        return render_template('end.html', room_id=room)
+
+
+@app.route('/room', methods=['POST'])
+def room():
+    if 'create' in request.form:
+        room_id = uuid.uuid4()
+        return render_template('adding.html', room_id=room_id)
+    if 'submit' in request.form:
+        print('summiy')
+        room_id = request.form.get('room_id')
+        session['room_id'] = room_id
+        return redirect(url_for('.book_page1'))
+
+
+# рандомні книжки з бази даних
 @app.route("/bookpage", methods=['POST', 'GET'])
 def book_page():
     books = Books.query.all()
@@ -103,48 +167,13 @@ def book_page():
                 book.set_dislike(0)
             book.set_dislike(int(book.get_dislike()) + 1)
         db.session.commit()
-    return render_template("book.html", title=book.get_title(),
+    return render_template("random_book.html", title=book.get_title(),
                            photo=book.get_photo(),
                            description=book.get_description(),
                            book_id=num_of_book)
-
-
-@app.route("/add_book", methods=['POST'])
-def add_book():
-    room = request.form['room_id']
-    title = request.form.get('book_title')
-    print(title)
-    photo = request.form.get('photo')
-    print(photo)
-    author = request.form.get('author')
-    print(author)
-    description = request.form.get('description')
-    print(description)
-    book_dict = {'name': title, 'picture': photo, 'author': author,
-                 'description': description, 'genre': None,
-                 'rating': None, 'room': room}
-    json_book = json.dumps(book_dict)
-    print('before request')
-    requests.post("http://127.0.0.1:5000/json", json=json_book)
-    if 'Add one more' in request.form:
-        return render_template('adding.html', room_id=room)
-    else:
-        return '<p>Save your room name</p>'
-
-
-@app.route('/adding')
-def adding():
-    room_id = uuid.uuid4()
-    return render_template('adding.html', room_id=room_id)
-
-
-@app.route('/room')
-def room():
-    pass
-
-@app.route("/action")
-def action():
-    return render_template('choose_option.html')
+# @app.route("/action")
+# def action():
+#     return render_template('choose_option.html')
 
 
 # twitter_blueprint = make_twitter_blueprint(

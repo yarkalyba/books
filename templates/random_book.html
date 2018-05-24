@@ -8,26 +8,24 @@
 <body style="background-color:black;">
 
 <section class="wrapper">
-    {% for book in books %}
     <div class="title-section">
-        <h1 style="color:wheat">{{ book.title }}</h1>
+        <h1 style="color:wheat">{{ title }}</h1>
     </div>
     <div class="content-section">
         <div class="image-block inner-data">
-            <img src="{{ book.photo }}"/>
+            <img src="{{ photo }}"/>
         </div>
         <div class="description-block inner-data">
-            <p>{{ book.description }}</p>
+            <p>{{ description }}</p>
         </div>
     </div>
     <div class="control-section">
-        <form action="bookpage1" method="post">
-            <input type="hidden" value="{{ book.id }}" name="book_id">
+        <form action="bookpage" method="post">
+            <input type="hidden" value="{{ book_id }}" name="book_id">
             <input type="submit" value='like' name='like' class="button">
             <input type="submit" value='dislike' name='dislike' class="button gray">
         </form>
     </div>
-    {% endfor %}
 </section>
 </body>
 </html>
