@@ -58,12 +58,12 @@ def rating_page():
     books = Books.query.all()
     num_of_book = random.randint(0, len(books))
     upd = []
-    for i in range(0,num_of_book):
+    for i in range(len(books)):
         book = books[i]
-        upd.append(dict(title=book.get_title(),
-                           photo=book.get_photo(),
-                           description=book.get_description(),
-                           likes=book.get_like(), dislikes=book.get_dislike() ))
+        upd.append(dict(title=book.title,
+                           photo=book.photo,
+                           description=book.description,
+                           likes=book.likes, dislikes=book.dislikes))
     upd = sorted(upd, key=lambda x: x['likes'] if x['likes'] else 0, reverse = True)
     return render_template("rating.html", items = upd,)
 
