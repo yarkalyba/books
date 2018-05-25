@@ -1,6 +1,4 @@
-from flask import Flask, request, render_template, session, redirect, \
-    url_for, \
-    session
+from flask import Flask, request, render_template, session, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate, MigrateCommand
 from flask_script import Manager
@@ -17,6 +15,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = config.DB_PATH
 
 db = SQLAlchemy(app)
 # migrate = Migrate(app, db)
+
 # manager = Manager(app)
 # manager.add_command('db', MigrateCommand)
 
@@ -25,10 +24,6 @@ from models import *
 
 db.create_all()
 
-
-@app.route("/policy")
-def policy():
-    return '<p>Policy</p>'
 
 
 @app.route('/')
@@ -43,7 +38,6 @@ def login():
     # name = session.get('user')
     # print(name)
     return render_template('room.html')
-
 
 @app.route("/json", methods=['POST'])
 def book_json():
@@ -82,39 +76,67 @@ def book_json():
 def main_page():
     return render_template('facebook.html')
 
-
 @app.route('/rating', methods=['GET'])
 def rating_page():
     books = Books.query.all()
     num_of_book = random.randint(0, len(books))
     upd = []
-    for i in range(0, num_of_book):
+    for i in range(len(books)):
         book = books[i]
-        upd.append(dict(title=book.get_title(),
-                        photo=book.get_photo(),
-                        description=book.get_description(),
-                        likes=book.get_like(), dislikes=book.get_dislike()))
-    upd = sorted(upd, key=lambda x: x['likes'] if x['likes'] else 0,
-                 reverse=True)
-    return render_template("rating.html", items=upd, )
+        upd.append(dict(title=book.title,
+                           photo=book.photo,
+                           description=book.description,
+                           likes=book.likes, dislikes=book.dislikes))
+    upd = sorted(upd, key=lambda x: x['likes'] if x['likes'] else 0, reverse = True)
+    return render_template("rating.html", items = upd,)
 
 
 @app.route('/bookpage1', methods=['POST', 'GET'])
 def book_page1():
     name = session['room_id']
-    books = Books.query.filter(Books.rooms_with_books.any(name=name, visited=None)).all()
+    book = Books.query.filter(Books.rooms_with_books.any(name=name)).first()
+    book_id = book.id
     if request.method == 'POST':
+        # room = Room.query.filter(Room.rooms_books.any(name=book_id)).first()
         book = Books.query.get(int(request.form['book_id']))
-        if 'like' in request.form:
+        if request.form['action'] == 'like':
             if book.get_like() == None:
                 book.set_like(0)
             book.set_like(int(book.get_like()) + 1)
         else:
             if book.get_dislike() == None:
                 book.set_dislike(0)
-            book.set_dislike(int(book.get_dislike()) + 1)
+            book.set_dislike(int(book.dislikes) + 1)
         db.session.commit()
-    return render_template("book.html", books=books)
+    return render_template("random_book.html", title=book.title,
+                                      photo=book.photo,
+                                      description=book.description,
+                                      book_id=book_id)
+    # return render_template("book.html", books=books)
+
+# @app.route("/bookpage", methods=['POST', 'GET'])
+# def book_page():
+#     books = Books.query.all()
+#     num_of_book = random.randint(0, len(books))
+#     book = books[num_of_book]
+#     print('lol')
+#     if request.method == 'POST':
+#         print(int(request.form['book_id']))
+#         book = books[int(request.form['book_id'])]
+#         print(book)
+#         if 'like' in request.form:
+#             if book.get_like() == None:
+#                 book.set_like(0)
+#             book.set_like(int(book.get_like()) + 1)
+#         else:
+#             if book.get_dislike() == None:
+#                 book.set_dislike(0)
+#             book.set_dislike(int(book.get_dislike()) + 1)
+#         db.session.commit()
+#     return render_template("book.html", title=book.get_title(),
+#                            photo=book.get_photo(),
+#                            description=book.get_description(),
+#                            book_id=num_of_book)
 
 
 @app.route("/add_book", methods=['POST'])
@@ -136,48 +158,27 @@ def add_book():
         return render_template('end.html', room_id=room)
 
 
-# поки що перша сторінка
+@app.route('/adding')
+def adding():
+    room_id = uuid.uuid4()
+    return render_template('adding.html', room_id=room_id)
+
+
 @app.route('/room', methods=['POST'])
 def room():
+    print('lol')
     if 'create' in request.form:
         room_id = uuid.uuid4()
+        print('lol')
         return render_template('adding.html', room_id=room_id)
     if 'submit' in request.form:
         room_id = request.form.get('room_id')
         session['room_id'] = room_id
         return redirect(url_for('.book_page1'))
 
-
-# рандомні книжки з бази даних
-# @app.route("/bookpage", methods=['POST', 'GET'])
-# def book_page():
-#     books = Books.query.all()
-#     num_of_book = random.randint(0, len(books))
-#     book = books[num_of_book]
-#     print('lol')
-#     if request.method == 'POST':
-#         print(int(request.form['book_id']))
-#         book = books[int(request.form['book_id'])]
-#         print(book)
-#         if 'like' in request.form:
-#             if book.get_like() == None:
-#                 book.set_like(0)
-#             book.set_like(int(book.get_like()) + 1)
-#
-#         else:
-#             if book.get_dislike() == None:
-#                 book.set_dislike(0)
-#             book.set_dislike(int(book.get_dislike()) + 1)
-#         db.session.commit()
-#     return render_template("random_book.html", title=book.get_title(),
-#                            photo=book.get_photo(),
-#                            description=book.get_description(),
-#                            book_id=num_of_book)
-
-
-# @app.route("/action")
-# def action():
-#     return render_template('choose_option.html')
+@app.route("/action")
+def action():
+    return render_template('choose_option.html')
 
 
 # twitter_blueprint = make_twitter_blueprint(
