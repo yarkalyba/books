@@ -137,7 +137,7 @@ def adding():
     return render_template('adding.html', room_id=room_id)
 
 
-@app.route('/room')
+@app.route('/room', methods=['POST', 'GET'])
 def room():
     return render_template('room.html')
 
