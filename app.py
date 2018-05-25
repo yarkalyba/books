@@ -97,7 +97,6 @@ def book_page():
             if book.get_like() == None:
                 book.set_like(0)
             book.set_like(int(book.get_like()) + 1)
-
         else:
             if book.get_dislike() == None:
                 book.set_dislike(0)
@@ -140,7 +139,7 @@ def adding():
 
 @app.route('/room')
 def room():
-    pass
+    return render_template('room.html')
 
 @app.route("/action")
 def action():
