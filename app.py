@@ -97,16 +97,16 @@ def book_page1():
     book = Books.query.filter(Books.rooms_with_books.any(name=name)).first()
     book_id = book.id
     if request.method == 'POST':
-        room = Room.query.filter(Room.rooms_books.any(name=book_id)).first()
+        # room = Room.query.filter(Room.rooms_books.any(name=book_id)).first()
         book = Books.query.get(int(request.form['book_id']))
-        if 'like' in request.form:
+        if request.form['action'] == 'like':
             if book.get_like() == None:
                 book.set_like(0)
             book.set_like(int(book.get_like()) + 1)
         else:
             if book.get_dislike() == None:
                 book.set_dislike(0)
-            book.set_dislike(int(book.dislike) + 1)
+            book.set_dislike(int(book.dislikes) + 1)
         db.session.commit()
     return render_template("random_book.html", title=book.title,
                                       photo=book.photo,
