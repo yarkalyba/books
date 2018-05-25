@@ -5,3 +5,6 @@
     width: 300px;
     height: 600px;
 }
+
+<base href="/books">
+   <link rel="stylesheet" type="text/css" href="static/add.css">
