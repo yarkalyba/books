@@ -3,11 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <title>End</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
 </head>
 <body>
-<h3>Remember name of your room: {{ room_id }}</h3>
-<form action="start" method="post">
-    <input type="submit" value='exit' name='action' class="button">
+<div class="container-fluid justify-content-center align-items-center ">
+<h3 class = "display-3">Your room name:{{ room_id }}</h3>
+<form action="start" method="post" class = "text-center">
+    <input class = "btn btn-dark btn-lg btn-block" type="submit" value='exit' name='action' >
 </form>
+    </div>
 </body>
 </html>
