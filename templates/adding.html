@@ -4,28 +4,28 @@
     <meta charset="UTF-8">
     <title>Add your book</title>
     <base href="/books">
-   <link rel="stylesheet" type="text/css" href="static/add.css">
+    <link rel="stylesheet" type="text/css" href="static/add.css">
 </head>
 <body>
 
 
-<div class = "main-block">
+<div class="main-block">
     <h2>Add book</h2>
     <form action="add_book" method="post" id="yarka">
-    <input type="hidden" value="{{ room_id }}" name="book_id">
-    Book title:<br>
-    <input type="text" name="book_title"><br>
+        <input type="hidden" value="{{ room_id }}" name="book_id">
+        Book title:<br>
+        <input type="text" name="book_title"><br>
 
-    Photo:<br>
-    <input type="text" name="photo"><br>
+        Photo:<br>
+        <input type="text" name="photo"><br>
 
-    Author:<br>
-    <input type="text" name="author"><br>
-    Description:<br>
-    <textarea name="description" form="yarka"></textarea> <br>
-    <input type="submit" value="Add one more">
-    <input type="submit" value='Stop adding'>
-</form>
+        Author:<br>
+        <input type="text" name="author"><br>
+        Description:<br>
+        <textarea name="description" form="yarka"></textarea> <br>
+        <input type="submit" value='add' name='action' class="button">
+        <input type="submit" value='stop' name='action' class="button">
+    </form>
 </div>
 
 </body>
