@@ -8,6 +8,8 @@ import json
 import config
 import requests
 import uuid
+import secrets
+
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'rybka1'
@@ -160,7 +162,7 @@ def add_book():
 
 @app.route('/adding')
 def adding():
-    room_id = uuid.uuid4()
+    room_id = secrets.token_hex(4)
     return render_template('adding.html', room_id=room_id)
 
 
