@@ -3,7 +3,8 @@ from app import db
 rooms = db.Table('rooms',
                  db.Column('book_id', db.Integer, db.ForeignKey('books.id'),
                            primary_key=True),
-                 db.Column('room_id', db.Integer, db.ForeignKey('room.id')))
+                 db.Column('room_id', db.Integer, db.ForeignKey('room.id')),
+                 db.Column('seen', db.BOOLEAN))
 
 
 class Books(db.Model):
@@ -64,7 +65,6 @@ class Room(db.Model):
     rooms_books = db.relationship('Books', secondary=rooms, lazy='subquery',
                                   backref=db.backref('rooms_with_books',
                                                      lazy=True))
-    visited = db.Column(db.BOOLEAN)
 
 
 class User(db.Model):
