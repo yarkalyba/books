@@ -1,6 +1,9 @@
 from app import db
 
-rooms = db.Table('rooms',db.Column('book_id', db.Integer, db.ForeignKey('books.id'),primary_key=True),db.Column('room_id', db.Integer, db.ForeignKey('room.id'),primary_key=True))
+rooms = db.Table('rooms',
+                 db.Column('book_id', db.Integer, db.ForeignKey('books.id'),
+                           primary_key=True),
+                 db.Column('room_id', db.Integer, db.ForeignKey('room.id')))
 
 
 class Books(db.Model):
@@ -59,7 +62,9 @@ class Room(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.Text, nullable=True)
     rooms_books = db.relationship('Books', secondary=rooms, lazy='subquery',
-                                  backref=db.backref('rooms_with_books', lazy=True))
+                                  backref=db.backref('rooms_with_books',
+                                                     lazy=True))
+    visited = db.Column(db.BOOLEAN)
 
 
 class User(db.Model):
