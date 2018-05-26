@@ -8,11 +8,11 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
 </head>
 <body>
-<div class="container-fluid justify-content-center align-items-center ">
-<h3 class = "display-3">Your room name:{{ room_id }}</h3>
-<form action="start" method="post" class = "text-center">
+<div class="container justify-content-center align-items-center" style="position: relative; top:30vh ;margin: 0 auto;">
+    <h3 class = "display-4">Your room name:{{ room_id }}</h3>
+    <form action="start" method="post" class = "text-center">
     <input class = "btn btn-dark btn-lg btn-block" type="submit" value='exit' name='action' >
-</form>
-    </div>
+    </form>
+</div>
 </body>
 </html>
