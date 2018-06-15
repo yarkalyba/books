@@ -12,7 +12,7 @@
     <title> Ratings</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='halp.css')}}">
 </head>
-<body>
+<body style="background-color:black">
     <table class="table table-dark">
   <thead>
     <tr>
@@ -29,8 +29,16 @@
       <td><h3>{{ item.title }}</h3></td>
         <td><img src="{{ item.photo }}"/></td>
       <td><p>{{ item.description }}</p></td>
-      <td><p>{{ item.likes }}</p></td>
+      {% if item.likes %}
+       <td><p>{{ item.likes }}</p></td>
+        {% else %}
+        <td><p>0</p></td>
+        {% endif %}
+        {% if item.dislikes %}
         <td><p>{{ item.dislikes }}</p></td>
+        {% else %}
+        <td><p>0</p></td>
+        {% endif %}
     </tr>
     {% endfor %}
   </tbody>
