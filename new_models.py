@@ -1,11 +1,14 @@
 from app import db
 
-rooms = db.Table('rooms',
-                 db.Column('book_id', db.Integer, db.ForeignKey('books.id'),
-                           primary_key=True),
-                 db.Column('room_id', db.Integer, db.ForeignKey('room.id')),
-                 db.Column('seen', db.BOOLEAN))
 
+class Association(db.Model):
+    __tablename__ = 'association'
+    room_id = db.Column(db.Integer, db.ForeignKey('room.id'), primary_key=True)
+    book_id = db.Column(db.Integer, db.ForeignKey('book.id'), primary_key=True)
+    seen = db.Column(db.BOOLEAN)
+
+    book = db.relationship('Book', back_populates='rooms')
+    room = db.relationship('Room', back_populates='books')
 
 class Book(db.Model):
     """
@@ -21,24 +24,7 @@ class Book(db.Model):
     rating_from_bookstore = db.Column(db.Float)
     genre_id = db.Column(db.Integer, db.ForeignKey('genre.id'))
     author_id = db.Column(db.Integer, db.ForeignKey('author.id'))
-
-    # def get_title(self):
-    #     return self.title
-    #
-    # def get_photo(self):
-    #     return self.photo
-    #
-    # def get_like(self):
-    #     return self.likes
-    #
-    # def get_dislike(self):
-    #     return self.dislikes
-    #
-    # def get_description(self):
-    #     return self.description
-    #
-    # def get_id(self):
-    #     return self.id
+    rooms = db.relationship('Association', back_populates='book')
 
     def set_like(self, rating):
         self.likes = rating
@@ -62,9 +48,7 @@ class Genre(db.Model):
 class Room(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.Text, nullable=True)
-    rooms_books = db.relationship('Book', secondary=rooms, lazy='subquery',
-                                  backref=db.backref('rooms_with_books',
-                                                     lazy=True))
+    books = db.relationship('Association', back_populates='room')
 
 
 class User(db.Model):

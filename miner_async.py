@@ -69,9 +69,9 @@ async def parse_book(url):
     db.session.add(genre)
     db.session.add(author)
     db.session.commit()
-    book = Books(title=name, photo=picture_add, description=description,
-                 rating_from_bookstore=rating_from_bookstore,
-                 genre_id=genre.id, author_id=author.id)
+    book = Book(title=name, photo=picture_add, description=description,
+                rating_from_bookstore=rating_from_bookstore,
+                genre_id=genre.id, author_id=author.id)
     db.session.add(book)
     db.session.commit()
 

@@ -1,6 +1,5 @@
 from multiprocessing import Pool
 from bs4 import BeautifulSoup
-from models import *
 import json
 import urllib.request
 
