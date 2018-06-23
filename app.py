@@ -5,14 +5,13 @@ import json
 import config
 import requests
 import secrets
+from new_models2 import *
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'rybka1'
 app.config['SQLALCHEMY_DATABASE_URI'] = config.DB_PATH
 
 db = SQLAlchemy(app)
-
-from new_models2 import *
 
 db.create_all()
 
@@ -30,7 +29,6 @@ def login():
 @app.route('/rating', methods=['GET'])
 def rating_page():
     books = Book.query.all()
-    num_of_book = random.randint(0, len(books))
     upd = []
     for i in range(len(books)):
         book = books[i]
@@ -171,12 +169,6 @@ def room():
         session['room_id'] = Room.query.filter_by(name=room_id).first().id
         return redirect(url_for('.book_page1'))
 
-
-#
-# @app.route("/action")
-# def action():
-#     return render_template('choose_option.html')
-#
 
 # twitter_blueprint = make_twitter_blueprint(
 # api_key='f7dUFCVeAspsUmXBZXGLrNF8e',
